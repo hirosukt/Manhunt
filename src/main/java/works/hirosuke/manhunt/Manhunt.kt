@@ -1,8 +1,5 @@
 package works.hirosuke.manhunt
 
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.BaseComponent
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -17,8 +14,18 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import works.hirosuke.manhunt.commands.impl.RegisterCommand
+import works.hirosuke.manhunt.commands.impl.ResetCommand
 
 class Manhunt : JavaPlugin(), Listener {
+
+    companion object {
+        lateinit var plugin: JavaPlugin
+    }
+
+    init {
+        plugin = this
+    }
 
     private val compassTargetData = mutableMapOf<Player, Player>()
 
@@ -26,6 +33,9 @@ class Manhunt : JavaPlugin(), Listener {
         // Plugin startup logic
         logger.info("plugin has loaded.")
         this.server.pluginManager.registerEvents(this, this)
+
+        ResetCommand.register()
+        RegisterCommand.register()
     }
 
     override fun onDisable() {

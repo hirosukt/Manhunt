@@ -5,3 +5,18 @@ prefix: Manhunt
 authors: [ Hirosuke ]
 description: Original plugin for manhunt.
 website: hirosuke.works
+commands:
+  resetAllPlayer:
+    permission: hunt.reset
+  registerTeam:
+    permission: hunt.register
+permissions:
+  hunt.*:
+    default: op
+    children:
+      - hunt.reset
+      - hunt.register
+  hunt.reset:
+    default: op
+  hunt.register:
+    default: op
