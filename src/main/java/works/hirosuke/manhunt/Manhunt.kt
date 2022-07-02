@@ -58,13 +58,13 @@ class Manhunt : JavaPlugin(), Listener {
         compassTargetData.filter { it.value == player }.forEach {
             it.key.compassTarget = player.location
 
-            val distance = when (it.key.location.distance(player.location)) {
-                in 0.0..1023.0 -> "§cNearby"
-                in 1024.0..2048.0 -> "§eMiddle"
+            val distance = when (it.key.location.distance(player.location).toInt()) {
+                in 0..1023 -> "§cNearby"
+                in 1024..2048 -> "§eMiddle"
                 else -> "§aFar"
             }
 
-            it.key.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("Target Distance: $distance"))
+            it.key.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("Target Distance: ${distance}m"))
         }
     }
 
