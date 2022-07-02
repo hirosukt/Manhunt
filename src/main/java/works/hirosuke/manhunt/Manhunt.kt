@@ -1,5 +1,8 @@
 package works.hirosuke.manhunt
 
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -33,18 +36,20 @@ class Manhunt : JavaPlugin(), Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
         if (!event.hasItem() || event.action !in listOf(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK)) return
-        if (event.item.type != Material.COMPASS) return
+
+        val item = event.item ?: return
+        if (item.type != Material.COMPASS) return
 
         val player = event.player
-        val meta = event.item.itemMeta
+        val meta = item.itemMeta ?: return
         val onlinePlayers = this.server.onlinePlayers.toList().sortedByDescending { it.name }
         val index = onlinePlayers.indexOf(compassTargetData[player]) + 1
 
         compassTargetData[player] = onlinePlayers[if (index > onlinePlayers.lastIndex) 0 else index]
-        player.compassTarget = compassTargetData[player]?.location
+        player.compassTarget = compassTargetData[player]?.location ?: return
 
-        meta.displayName = "§rTarget to ${compassTargetData[player]?.name}"
-        event.item.itemMeta = meta
+        meta.setDisplayName("§rTarget to ${compassTargetData[player]?.name}")
+        item.itemMeta = meta
     }
 
     @EventHandler
@@ -52,6 +57,14 @@ class Manhunt : JavaPlugin(), Listener {
         val player = event.player
         compassTargetData.filter { it.value == player }.forEach {
             it.key.compassTarget = player.location
+
+            val distance = when (it.key.location.distance(player.location)) {
+                in 0.0..256.0 -> "Nearby"
+                in 256.0..1023.0 -> "Middle"
+                else -> "Far"
+            }
+
+            it.key.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("Target Distance: $distance"))
         }
     }
 
@@ -65,7 +78,7 @@ class Manhunt : JavaPlugin(), Listener {
     fun onDeath(event: PlayerDeathEvent) {
         val player = event.entity
         if (player.scoreboard.getTeam("escaper") != null)
-        if (!player.scoreboard.getTeam("escaper").hasPlayer(player)) return
+        if (!(player.scoreboard.getTeam("escaper") ?: return).hasPlayer(player)) return
         player.gameMode = GameMode.SPECTATOR
     }
 
@@ -76,7 +89,7 @@ class Manhunt : JavaPlugin(), Listener {
             event.message = "§a${event.message.substringAfter('!')}"
 
             event.recipients.removeAll(this.server.onlinePlayers.toSet())
-            player.scoreboard.getTeam("escaper").players.forEach { event.recipients.add(Bukkit.getPlayer(it.uniqueId)) }
+            (player.scoreboard.getTeam("escaper") ?: return).players.forEach { event.recipients.add(Bukkit.getPlayer(it.uniqueId)) }
         }
     }
 }
