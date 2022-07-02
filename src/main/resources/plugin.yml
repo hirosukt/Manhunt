@@ -1,0 +1,7 @@
+name: Manhunt
+version: '${version}'
+main: works.hirosuke.manhunt.Manhunt
+prefix: Manhunt
+authors: [ Hirosuke ]
+description: Original plugin for manhunt.
+website: hirosuke.works
