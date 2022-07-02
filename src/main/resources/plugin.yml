@@ -1,12 +1,12 @@
 name: Manhunt
-version: '${version}'
+version: '1.0'
 main: works.hirosuke.manhunt.Manhunt
 prefix: Manhunt
 authors: [ Hirosuke ]
 description: Original plugin for manhunt.
 website: hirosuke.works
 commands:
-  resetAllPlayer:
+  reset:
     permission: hunt.reset
   registerTeam:
     permission: hunt.register
