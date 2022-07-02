@@ -55,17 +55,7 @@ class Manhunt : JavaPlugin(), Listener {
     @EventHandler
     fun onMove(event: PlayerMoveEvent) {
         val player = event.player
-        compassTargetData.filter { it.value == player }.forEach {
-            it.key.compassTarget = player.location
-
-            val distance = when (it.key.location.distance(player.location).toInt()) {
-                in 0..1023 -> "§cNearby"
-                in 1024..2048 -> "§eMiddle"
-                else -> "§aFar"
-            }
-
-            it.key.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("Target Distance: ${distance}m"))
-        }
+        compassTargetData.filter { it.value == player }.forEach { it.key.compassTarget = player.location }
     }
 
     @EventHandler
@@ -77,7 +67,7 @@ class Manhunt : JavaPlugin(), Listener {
     @EventHandler
     fun onDeath(event: PlayerDeathEvent) {
         val player = event.entity
-        if (player.scoreboard.getTeam("escaper") != null)
+        if (player.scoreboard.getTeam("escaper") != null) return
         if (!(player.scoreboard.getTeam("escaper") ?: return).hasPlayer(player)) return
         player.gameMode = GameMode.SPECTATOR
     }
