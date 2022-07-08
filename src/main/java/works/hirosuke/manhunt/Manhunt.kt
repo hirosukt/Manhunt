@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.ItemStack
@@ -72,24 +73,27 @@ class Manhunt : JavaPlugin(), Listener {
     fun onRespawn(event: PlayerRespawnEvent) {
         val player = event.player
         player.inventory.addItem(ItemStack(Material.COMPASS))
+
+        if ((player.scoreboard.getTeam("escaper") ?: return).hasPlayer(player)) {
+            player.gameMode = GameMode.SPECTATOR
+        }
     }
 
     @EventHandler
-    fun onDeath(event: PlayerDeathEvent) {
-        val player = event.entity
-        if (player.scoreboard.getTeam("escaper") != null) return
-        if (!(player.scoreboard.getTeam("escaper") ?: return).hasPlayer(player)) return
-        player.gameMode = GameMode.SPECTATOR
+    fun onJoin(e: PlayerJoinEvent) {
+        val player = e.player
+        if (player.inventory.contents.filterNotNull().map { it.type }.contains(Material.COMPASS)) {
+            player.inventory.addItem(ItemStack(Material.COMPASS))
+        }
     }
 
     @EventHandler
     fun onChat(event: AsyncPlayerChatEvent) {
-        val player = event.player
         if (event.message.startsWith('!')) {
             event.message = "§a${event.message.substringAfter('!')}"
 
             event.recipients.removeAll(this.server.onlinePlayers.toSet())
-            (player.scoreboard.getTeam("escaper") ?: return).players.forEach { event.recipients.add(Bukkit.getPlayer(it.uniqueId)) }
+            this.server.onlinePlayers.filter { (it.scoreboard.getTeam("escaper") ?: return).hasEntry(it.displayName) }.forEach { event.recipients.add(it) }
         }
     }
 }

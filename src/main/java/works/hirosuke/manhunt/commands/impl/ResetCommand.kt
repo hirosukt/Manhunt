@@ -9,7 +9,7 @@ object ResetCommand : Command("reset") {
 
     override fun onCommand(sender: CommandSender, label: String, args: Array<out String>) {
         if (sender !is Player) return
-        sender.server.onlinePlayers.filterNot { it == sender }.forEach {
+        sender.server.onlinePlayers.forEach {
             it.inventory.clear()
             it.health = 0.0
         }
