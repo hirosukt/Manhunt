@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import works.hirosuke.manhunt.commands.impl.PrepareCommand
 import works.hirosuke.manhunt.commands.impl.RegisterCommand
 import works.hirosuke.manhunt.commands.impl.ResetCommand
 
@@ -37,6 +38,7 @@ class Manhunt : JavaPlugin(), Listener {
 
         ResetCommand.register()
         RegisterCommand.register()
+        PrepareCommand.register()
     }
 
     override fun onDisable() {

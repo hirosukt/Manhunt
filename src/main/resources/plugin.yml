@@ -10,6 +10,8 @@ commands:
     permission: hunt.reset
   registerTeam:
     permission: hunt.register
+  prepare:
+    permission: hunt.prepare
 permissions:
   hunt.*:
     default: op
@@ -19,4 +21,6 @@ permissions:
   hunt.reset:
     default: op
   hunt.register:
+    default: op
+  hunt.prepare:
     default: op
