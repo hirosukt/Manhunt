@@ -17,6 +17,5 @@ object TellhereCommand : Command("tellhere") {
         return if (args.isNotEmpty()) {
             plugin.server.onlinePlayers.map { it.displayName }
         } else emptyList()
-
     }
 }
