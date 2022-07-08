@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import works.hirosuke.manhunt.commands.impl.PrepareCommand
 import works.hirosuke.manhunt.commands.impl.RegisterCommand
 import works.hirosuke.manhunt.commands.impl.ResetCommand
+import works.hirosuke.manhunt.commands.impl.TellhereCommand
 
 class Manhunt : JavaPlugin(), Listener {
 
@@ -39,6 +40,7 @@ class Manhunt : JavaPlugin(), Listener {
         ResetCommand.register()
         RegisterCommand.register()
         PrepareCommand.register()
+        TellhereCommand.register()
     }
 
     override fun onDisable() {

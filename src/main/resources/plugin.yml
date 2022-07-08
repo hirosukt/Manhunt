@@ -12,6 +12,8 @@ commands:
     permission: hunt.register
   prepare:
     permission: hunt.prepare
+  tellhere:
+    permission: hunt.tellhere
 permissions:
   hunt.*:
     default: op
@@ -24,3 +26,5 @@ permissions:
     default: op
   hunt.prepare:
     default: op
+  hunt.tellhere:
+    default: true
